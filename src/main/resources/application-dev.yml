@@ -1,0 +1,3 @@
+application:
+  jwt:
+    signing-key: ${JWT_SIGNING_KEY:YxE56HGb9zJ2ZfC1tV9kA3oM7qW5L6p1QvR8U2xW7n4=}
