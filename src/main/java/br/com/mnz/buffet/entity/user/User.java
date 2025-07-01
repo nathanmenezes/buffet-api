@@ -1,5 +1,6 @@
 package br.com.mnz.buffet.entity.user;
 
+import br.com.mnz.buffet.core.exception.DontHaveCurrentUserException;
 import br.com.mnz.buffet.entity.BaseEntity;
 import br.com.mnz.buffet.entity.workspace.Workspace;
 import jakarta.persistence.*;
@@ -7,10 +8,13 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -39,6 +43,20 @@ public class User extends BaseEntity implements UserDetails, Serializable {
     @ManyToOne(optional = false)
     @JoinColumn(name = "workspace_id", nullable = false)
     private Workspace workspace;
+
+    public static User currentUser() {
+        Object user = Objects.requireNonNull(RequestContextHolder.getRequestAttributes())
+                .getAttribute("user", RequestAttributes.SCOPE_REQUEST);
+        if (user instanceof User) {
+            return (User) user;
+        }
+        throw new DontHaveCurrentUserException("No user is currently set in the request context.");
+    }
+
+    public static void setCurrentUser(User user) {
+        Objects.requireNonNull(RequestContextHolder.getRequestAttributes())
+                .setAttribute("user", user, RequestAttributes.SCOPE_REQUEST);
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
