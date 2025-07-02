@@ -9,7 +9,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>br.com.mnz</groupId>
-    <artifactId>buffet</artifactId>
+    <artifactId>shift</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>buffet</name>
     <description>buffet</description>
